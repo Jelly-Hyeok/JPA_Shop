@@ -1,5 +1,6 @@
 package jpbook.jpashop.domain;
 
+import jpbook.jpashop.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +26,24 @@ public class OrderItme {
     private int orderPrice; //주문 가격
     private int count; //주문 수량
 
+    // 생성 메서드
+    public static OrderItme createOrderItem(Item item, int orderPrice, int count){
+        OrderItme orderItme = new OrderItme();
+        orderItme.setItem(item);
+        orderItme.setOrderPrice(orderPrice);
+        orderItme.setCount(count);
+
+        item.removeStock(count);
+        return orderItme;
+    }
+
+    // 비즈니스 로직
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    //전체가격 비즈니스 로직
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }

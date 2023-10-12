@@ -1,5 +1,6 @@
 package jpbook.jpashop.domain;
 
+import jpbook.jpashop.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,4 +49,45 @@ public class Order {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
+
+    // 생성 메서드
+    public static Order createOrder(Member member, Delivery delivery, OrderItme... orderItmes){
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+
+        for(OrderItme orderItme : orderItmes){
+            order.addOrderItem(orderItme);
+        }
+
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+
+        return order;
+    }
+
+    // 비즈니스 로직
+
+    // 주문 취소
+    public void cancel(){
+        if(delivery.getStatus() == DeliveryStatus.COMP){
+            throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가함");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItme orderItme : orderItems){
+            orderItme.cancel();
+        }
+
+    }
+
+    // 전체가격 조회 로직
+    public int getTotalPrice(){
+        int totalPrice = 0;
+        for(OrderItme orderItme : orderItems){
+            totalPrice += orderItme.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
 }
