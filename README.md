@@ -1,4 +1,4 @@
-## :fork_and_knife: 간단 쇼핑몰
+## 🛍️ 간단 쇼핑몰
 
 ## :open_file_folder: 목차
 * 프로젝트 개요
